@@ -1,0 +1,73 @@
+#!/bin/sh
+
+str=*#*
+sed -e "/$str/r school_list" -e "/$str/d" scripts/students.sql > students.sql
+sed -e "/$str/r school_list" -e "/$str/d" scripts/students_data.sql > students_data.sql
+sed -e "/$str/r school_list" -e "/$str/d" scripts/teachers.sql > teachers.sql
+sed -e "/$str/r school_list" -e "/$str/d" scripts/teachers_data.sql > teachers_data.sql
+sed -e "/$str/r school_list" -e "/$str/d" scripts/schools.sql > schools.sql
+sed -e "/$str/r school_list" -e "/$str/d" scripts/schools_data.sql > schools_data.sql
+
+echo "Exporting schools ..."
+if  sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/schools.sql > ~/nts/backup/schools
+    then
+            echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+    else
+        echo -e  '\t\t\t\t\t\t[\e[00;31mFAILED\e[00m]'
+        exit
+    fi
+#echo "Exporting school properties  ..."
+#if  sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/schools_data.sql > ~/nts/backup/schools_data
+#    then
+#            echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+#    else
+#        echo -e  '\t\t\t\t\t\t[\e[00;31mFAILED\e[00m]'
+#        exit
+#    fi
+#---------------------
+echo "Exporting teachers ..."
+if  sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/teachers.sql > ~/nts/backup/teachers
+    then
+            echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+    else
+        echo -e  '\t\t\t\t\t\t[\e[00;31mFAILED\e[00m]'
+        exit
+    fi
+echo "Exporting teacher properties  ..."
+if  sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/teachers_data.sql > ~/nts/backup/teachers_data
+    then
+            echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+    else
+        echo -e  '\t\t\t\t\t\t[\e[00;31mFAILED\e[00m]'
+        exit
+    fi
+#-----------------------
+echo "Exporting students ..."
+if  sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/students.sql > ~/nts/backup/students
+    then
+            echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+    else
+        echo -e  '\t\t\t\t\t\t[\e[00;31mFAILED\e[00m]'
+        exit
+    fi
+echo "Exporting student properties  ..."
+if  sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/students_data.sql > ~/nts/backup/students_data
+    then
+            echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+    else
+        echo -e  '\t\t\t\t\t\t[\e[00;31mFAILED\e[00m]'
+        exit
+    fi
+
+
+#sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/schools.sql > ~/nts/backup/schools
+#sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/schools_data.sql > ~/nts/backup/schools_data
+#sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/teachers.sql > ~/nts/backup/teachers
+#sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/teachers_data.sql > ~/nts/backup/teachers_data
+#sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/students.sql > ~/nts/backup/students
+#sqlplus -s schoolstat/Sch00lStat@ssdb < ~/nts/students_data.sql > ~/nts/backup/students_data
+
+sed -i 's/###/;/g' ~/nts/backup/*
+echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
+cat ~/nts/backup/schools ~/nts/backup/teachers ~/nts/backup/students  ~/nts/backup/teachers_data ~/nts/backup/students_data > ~/nts/backup/nobd
+echo -e  '\t\t\t\t\t\t[\e[00;32mOK\e[00m]'
